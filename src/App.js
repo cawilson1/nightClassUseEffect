@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
-import { blue } from "color-name";
+import { Paper, Card } from "@material-ui/core";
+import Nav from "./components/Nav";
+import CalendarTodayTwoToneIcon from "@material-ui/icons/CalendarTodayTwoTone";
 
 //https://hn.algolia.com/api/v1/search?query=browser
 
@@ -28,13 +30,12 @@ function App() {
       //setArticles("Article was set");
     }
     getData();
-  }, [query]);
+  }, [toggle]);
 
   return (
     <div className="App">
+      <Nav setQuery={setQuery} setToggle={setToggle} toggle={toggle} />
       <header className="App-header">
-        <input onChange={event => setQuery(event.target.value)} />
-        <button onClick={() => setToggle(!toggle)}>Run Articles</button>
         <p style={appStyles.queryStringStyle}>{query}</p>
         <div>
           {articles[0] === undefined ? (
@@ -42,18 +43,22 @@ function App() {
           ) : (
             articles.map(article => {
               return (
-                <div key={article.objectID} style={appStyles.card}>
+                <Paper key={article.objectID} style={appStyles.paperStyle}>
                   <h4>{article.title}</h4>
                   <p>{article.author}</p>
-                  <p>{article.url}</p>
-                  <p>
-                    {article.created_at
-                      .slice(0, 10)
-                      .split("-")
-                      .join(" ")}
-                  </p>
+                  {/* <p>{article.url}</p> */}
+                  <div style={appStyles.dateStyle}>
+                    <CalendarTodayTwoToneIcon style={appStyles.calenderStyle} />{" "}
+                    <p>
+                      {article.created_at
+                        .slice(0, 10)
+                        .split("-")
+                        .join(" ")}
+                    </p>
+                  </div>
+
                   <br />
-                </div>
+                </Paper>
               );
             })
           )}
@@ -71,6 +76,17 @@ const appStyles = {
     backgroundColor: "white",
     color: "black",
     borderRadius: 5
+  },
+  paperStyle: {
+    width: 600
+  },
+  dateStyle: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  calenderStyle: {
+    paddingRight: 15
   }
 };
 
